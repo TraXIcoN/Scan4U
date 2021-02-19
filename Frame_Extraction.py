@@ -10,7 +10,7 @@ Open the main.py and edit the path to the video. Then run:
 $ python main.py
 Which will produce a folder called data with the images. There will be 2000+ images for example.mp4.
 '''
-import cv2
+from cv2 import cv2
 import numpy as np
 import os
 
@@ -21,7 +21,7 @@ try:
     if not os.path.exists('data'):
         os.makedirs('data')
 except OSError:
-    print ('Error: Creating directory of data')
+    print('Error: Creating directory of data')
 
 currentFrame = 0
 while(True):
@@ -30,7 +30,7 @@ while(True):
 
     # Saves image of the current frame in jpg file
     name = './data/frame' + str(currentFrame) + '.jpg'
-    print ('Creating...' + name)
+    print('Creating...' + name)
     cv2.imwrite(name, frame)
 
     # To stop duplicate images
