@@ -4,7 +4,7 @@
 # import the necessary packages
 from imutils import paths
 import argparse
-import cv2
+from cv2 import cv2
 import os
 import shutil
 
