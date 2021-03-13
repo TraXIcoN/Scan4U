@@ -14,11 +14,11 @@ dependencies:
   image_picker: ^0.6.7+12
   # Dependency for video player
   video_player: ^0.11.1+2
+  gallery_saver: ^2.0.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 
 flutter:
   uses-material-design: true

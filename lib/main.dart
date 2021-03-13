@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 
 void main() => runApp(MyApp());
 
@@ -29,6 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
   File _cameraImage;
   File _video;
   File _cameraVideo;
+  String secondButtonText = 'Record video';
 
   ImagePicker picker = ImagePicker();
 
@@ -77,6 +79,11 @@ class _MyHomePageState extends State<MyHomePage> {
     PickedFile pickedFile = await picker.getVideo(source: ImageSource.camera);
 
     _cameraVideo = File(pickedFile.path);
+    GallerySaver.saveVideo(pickedFile.path).then((bool success) {
+      setState(() {
+        secondButtonText = 'video saved!';
+      });
+    });
 
     _cameraVideoPlayerController = VideoPlayerController.file(_cameraVideo)
       ..initialize().then((_) {
@@ -161,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () {
                     _pickVideoFromCamera();
                   },
-                  child: Text("Pick Video From Camera"),
+                  child: Text(secondButtonText),
                 )
               ],
             ),
