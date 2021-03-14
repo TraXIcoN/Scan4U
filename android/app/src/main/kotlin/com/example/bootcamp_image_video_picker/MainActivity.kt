@@ -1,4 +1,4 @@
-package com.example.bootcamp_image_video_picker
+package com.example.scan4u
 
 import android.os.Bundle
 
