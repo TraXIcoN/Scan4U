@@ -15,7 +15,7 @@ dependencies:
   # Dependency for video player
   video_player: ^0.11.1+2
   gallery_saver: ^2.0.3
-  firebase_auth: ^0.14.0+5
+  firebase_auth:
   cloud_firestore: ^0.12.9+4
   provider: ^5.0.0
   flutter_spinkit: ^5.0.0

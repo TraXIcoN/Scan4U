@@ -31,6 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
   File _cameraImage;
   File _video;
   File _cameraVideo;
+  File sampleVideo;
   String secondButtonText = 'Record video';
 
   final AuthService _auth = AuthService();
@@ -40,17 +41,24 @@ class _MyHomePageState extends State<MyHomePage> {
   VideoPlayerController _videoPlayerController;
   VideoPlayerController _cameraVideoPlayerController;
 
-  Future uploadFile(pickedFile) async {
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('videos/${Path.basename(pickedFile.path)}}');
-    StorageUploadTask uploadTask = storageReference.putFile(_image);
+  Future uploadFile() async {
+    StorageReference storageReference =
+        FirebaseStorage.instance.ref().child('1.mp4');
+    StorageUploadTask uploadTask = storageReference.putFile(_video);
     await uploadTask.onComplete;
     print('File Uploaded');
     storageReference.getDownloadURL().then((fileURL) {
       setState(() {
         var _uploadedFileURL = fileURL;
       });
+    });
+  }
+
+  Future getVideo() async {
+    var tempVideo = await ImagePicker.pickVideo(source: ImageSource.gallery);
+
+    setState(() {
+      sampleVideo = tempVideo;
     });
   }
 
@@ -80,16 +88,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // This funcion will helps you to pick a Video File
   _pickVideo() async {
-    var pickedFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-    _video = File(pickedFile.path);
-
     /* _videoPlayerController = VideoPlayerController.file(_video)
       ..initialize().then((_) {
         setState(() {});
         _videoPlayerController.play();
       }); */
-    uploadFile(_video);
+    getVideo();
   }
 
   // This funcion will helps you to pick a Video File from Camera
@@ -102,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
         secondButtonText = 'video saved!';
       });
     });
-    print(uploadFile(pickedFile));
+    print(uploadFile());
 
     /* _cameraVideoPlayerController = VideoPlayerController.file(_cameraVideo)
       ..initialize().then((_) {
@@ -174,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 RaisedButton(
                   onPressed: () {
-                    _pickVideo();
+                    getVideo();
                   },
                   child: Text("Pick Video From Gallery"),
                 ),
@@ -191,6 +195,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     "Click on Pick Video to select video",
                     style: TextStyle(fontSize: 18.0),
                   ),
+                RaisedButton(
+                  onPressed: () {
+                    final StorageReference storageReference = FirebaseStorage
+                        .instance
+                        .ref()
+                        .child('videos/${sampleVideo.path}}');
+                    final StorageUploadTask uploadTask =
+                        storageReference.putFile(sampleVideo);
+                    print('File Uploaded');
+                  },
+                  child: Text("Upload"),
+                ),
                 RaisedButton(
                   onPressed: () {
                     _pickVideoFromCamera();
