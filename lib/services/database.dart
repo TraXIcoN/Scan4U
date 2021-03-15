@@ -1,10 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class DataBaseService{
+class DataBaseService {
+  final String uid;
+  DataBaseService({this.uid});
 
   //collection reference
-  final CollectionReference videoCollection = Firestore.instance.collection('videos');
+  final CollectionReference videoCollection =
+      Firestore.instance.collection('videos');
 
-  Future updateUserData()
-
+  Future updateUserData(String video, String name) async {
+    return await videoCollection.document(uid).setData({
+      'video': video,
+      'name': name,
+    });
+  }
 }

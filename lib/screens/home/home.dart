@@ -6,7 +6,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart' as Path;
+import 'package:scan4u/services/auth.dart';
+import 'package:scan4u/shared/file_extension.dart';
+import 'package:scan4u/shared/globals.dart' as globals;
+import 'package:scan4u/services/auth.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -32,7 +35,9 @@ class _MyHomePageState extends State<MyHomePage> {
   File _video;
   File _cameraVideo;
   File sampleVideo;
+  File temp;
   String secondButtonText = 'Record video';
+  String fileName = '';
 
   final AuthService _auth = AuthService();
 
@@ -41,24 +46,12 @@ class _MyHomePageState extends State<MyHomePage> {
   VideoPlayerController _videoPlayerController;
   VideoPlayerController _cameraVideoPlayerController;
 
-  Future uploadFile() async {
-    StorageReference storageReference =
-        FirebaseStorage.instance.ref().child('1.mp4');
-    StorageUploadTask uploadTask = storageReference.putFile(_video);
-    await uploadTask.onComplete;
-    print('File Uploaded');
-    storageReference.getDownloadURL().then((fileURL) {
-      setState(() {
-        var _uploadedFileURL = fileURL;
-      });
-    });
-  }
-
   Future getVideo() async {
-    var tempVideo = await ImagePicker.pickVideo(source: ImageSource.gallery);
-
+    PickedFile tempVideo =
+        await ImagePicker().getVideo(source: ImageSource.gallery);
+    temp = File(tempVideo.path);
     setState(() {
-      sampleVideo = tempVideo;
+      sampleVideo = temp;
     });
   }
 
@@ -93,7 +86,9 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() {});
         _videoPlayerController.play();
       }); */
-    getVideo();
+    fileName = await AppUtil.getFileNameWithExtension(sampleVideo);
+    globals.finalName = fileName.replaceAll(".jpg", ".mp4");
+    print(globals.finalName);
   }
 
   // This funcion will helps you to pick a Video File from Camera
@@ -106,8 +101,6 @@ class _MyHomePageState extends State<MyHomePage> {
         secondButtonText = 'video saved!';
       });
     });
-    print(uploadFile());
-
     /* _cameraVideoPlayerController = VideoPlayerController.file(_cameraVideo)
       ..initialize().then((_) {
         setState(() {});
@@ -179,6 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 RaisedButton(
                   onPressed: () {
                     getVideo();
+                    _pickVideo();
                   },
                   child: Text("Pick Video From Gallery"),
                 ),
@@ -196,14 +190,20 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: TextStyle(fontSize: 18.0),
                   ),
                 RaisedButton(
-                  onPressed: () {
-                    final StorageReference storageReference = FirebaseStorage
-                        .instance
-                        .ref()
-                        .child('videos/${sampleVideo.path}}');
+                  onPressed: () async {
+                    final StorageReference storageReference =
+                        FirebaseStorage.instance.ref().child(fileName);
                     final StorageUploadTask uploadTask =
                         storageReference.putFile(sampleVideo);
+                    await uploadTask.onComplete;
                     print('File Uploaded');
+                    storageReference.getDownloadURL().then((fileURL) {
+                      setState(() {
+                        globals.uploadedFileURL = fileURL;
+                        print(globals.uploadedFileURL);
+                      });
+                    });
+                    await _auth.databaseIntegrate();
                   },
                   child: Text("Upload"),
                 ),
@@ -220,4 +220,21 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+
+  Widget _buildDecoratedImage(int imageIndex) => Expanded(
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(width: 10, color: Colors.black38),
+            borderRadius: const BorderRadius.all(const Radius.circular(8)),
+          ),
+          margin: const EdgeInsets.all(4),
+          child: Image.asset('images/pic$imageIndex.jpg'),
+        ),
+      );
+  Widget _buildImageRow(int imageIndex) => Row(
+        children: [
+          _buildDecoratedImage(imageIndex),
+          _buildDecoratedImage(imageIndex + 1),
+        ],
+      );
 }

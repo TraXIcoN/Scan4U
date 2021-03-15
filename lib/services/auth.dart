@@ -1,11 +1,14 @@
 import 'package:scan4u/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:scan4u/shared/globals.dart' as globals;
+import 'package:scan4u/services/database.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //creating user object based on firebase user
   User _userFromFirebaseUser(FirebaseUser user) {
+    globals.userid = user.uid;
     return user != null ? User(uid: user.uid) : null;
   }
 
@@ -32,6 +35,7 @@ class AuthService {
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser user = result.user;
+      globals.userid = user.uid;
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -45,11 +49,23 @@ class AuthService {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser user = result.user;
+
+      await DataBaseService(uid: user.uid)
+          .updateUserData(globals.uploadedFileURL, globals.finalName);
+
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
       return null;
     }
+  }
+
+  Future databaseIntegrate() async {
+    final FirebaseUser user = await _auth.currentUser();
+    final uid = user.uid;
+    //create a new document for the user with the uid
+    await DataBaseService(uid: uid)
+        .updateUserData(globals.uploadedFileURL, globals.finalName);
   }
 
   //sign out
