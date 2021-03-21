@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:scan4u/services/auth.dart';
+import 'package:scan4u/services/post.dart';
 import 'package:scan4u/shared/file_extension.dart';
 import 'package:scan4u/shared/globals.dart' as globals;
 import 'package:scan4u/services/auth.dart';
@@ -191,7 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 RaisedButton(
                   onPressed: () async {
-                    final StorageReference storageReference =
+                    /* final StorageReference storageReference =
                         FirebaseStorage.instance.ref().child(fileName);
                     final StorageUploadTask uploadTask =
                         storageReference.putFile(sampleVideo);
@@ -203,7 +203,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         print(globals.uploadedFileURL);
                       });
                     });
-                    await _auth.databaseIntegrate();
+                    await _auth.databaseIntegrate(); */
+                    await createAlbum();
                   },
                   child: Text("Upload"),
                 ),
