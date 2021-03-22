@@ -191,7 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 RaisedButton(
                   onPressed: () async {
-                    /* final StorageReference storageReference =
+                    final StorageReference storageReference =
                         FirebaseStorage.instance.ref().child(fileName);
                     final StorageUploadTask uploadTask =
                         storageReference.putFile(sampleVideo);
@@ -203,8 +203,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         print(globals.uploadedFileURL);
                       });
                     });
-                    await _auth.databaseIntegrate(); */
-                    await createAlbum();
+                    await _auth.databaseIntegrate();
+                    await sendVideo();
                   },
                   child: Text("Upload"),
                 ),
