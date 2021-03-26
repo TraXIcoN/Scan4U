@@ -63,6 +63,7 @@ class AuthService {
   Future databaseIntegrate() async {
     final FirebaseUser user = await _auth.currentUser();
     final uid = user.uid;
+    print(user.uid);
     //create a new document for the user with the uid
     await DataBaseService(uid: uid)
         .updateUserData(globals.uploadedFileURL, globals.finalName);
