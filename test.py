@@ -75,6 +75,7 @@ session.run(tf.global_variables_initializer())
 LoadModel(session, cfg.SaveDir+'/')
 
 try:
+	print("it's in")
 	session.run(tf.assign(phase_train, False))
 
 	randIxs = range(0, len(InputListTest))
