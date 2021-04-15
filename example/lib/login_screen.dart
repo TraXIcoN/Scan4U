@@ -36,7 +36,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlutterLogin(
       title: Constants.appName,
-      logo: 'assets/images/ecorp.png',
+      logo: 'assets/images/image.png',
       logoTag: Constants.logoTag,
       titleTag: Constants.titleTag,
       // loginAfterSignUp: false,
@@ -169,7 +169,6 @@ class LoginScreen extends StatelessWidget {
         return _recoverPassword(name);
         // Show new password dialog
       },
-      showDebugButtons: true,
     );
   }
 }

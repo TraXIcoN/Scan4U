@@ -83,7 +83,7 @@ class _DashboardScreenState extends State<DashboardScreen>
             child: Hero(
               tag: Constants.logoTag,
               child: Image.asset(
-                'assets/images/ecorp.png',
+                'assets/images/image.png',
                 filterQuality: FilterQuality.high,
                 height: 30,
               ),
@@ -148,26 +148,15 @@ class _DashboardScreenState extends State<DashboardScreen>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  '\$',
-                  style: theme.textTheme.headline3!.copyWith(
-                    fontWeight: FontWeight.w300,
-                    color: accentColor.shade400,
-                  ),
-                ),
                 SizedBox(width: 5),
-                AnimatedNumericText(
-                  initialValue: 14,
-                  targetValue: 3467.87,
-                  curve: Interval(0, .5, curve: Curves.easeOut),
-                  controller: _loadingController!,
+                Text(
+                  'Welcome',
                   style: theme.textTheme.headline3!.copyWith(
                     foreground: Paint()..shader = linearGradient,
                   ),
                 ),
               ],
             ),
-            Text('Account Balance', style: theme.textTheme.caption),
           ],
         ),
       ),
@@ -203,8 +192,8 @@ class _DashboardScreenState extends State<DashboardScreen>
       crossAxisCount: 3,
       children: [
         _buildButton(
-          icon: Icon(FontAwesomeIcons.user),
-          label: 'Profile',
+          icon: Icon(FontAwesomeIcons.camera),
+          label: 'Image capture',
           interval: Interval(0, aniInterval),
         ),
         _buildButton(
@@ -213,26 +202,26 @@ class _DashboardScreenState extends State<DashboardScreen>
             padding: const EdgeInsets.only(left: 16.0),
             alignment: Alignment.centerLeft,
             child: Icon(
-              FontAwesomeIcons.moneyBillAlt,
+              FontAwesomeIcons.photoVideo,
               size: 20,
             ),
           ),
-          label: 'Fund Transfer',
+          label: 'Pick Image',
           interval: Interval(step, aniInterval + step),
         ),
         _buildButton(
-          icon: Icon(FontAwesomeIcons.handHoldingUsd),
-          label: 'Payment',
+          icon: Icon(FontAwesomeIcons.video),
+          label: 'Video capture',
           interval: Interval(step * 2, aniInterval + step * 2),
         ),
         _buildButton(
-          icon: Icon(FontAwesomeIcons.chartLine),
-          label: 'Report',
+          icon: Icon(FontAwesomeIcons.fileVideo),
+          label: 'Pick Video',
           interval: Interval(0, aniInterval),
         ),
         _buildButton(
-          icon: Icon(Icons.vpn_key),
-          label: 'Register',
+          icon: Icon(FontAwesomeIcons.filePdf),
+          label: 'My PDFs',
           interval: Interval(step, aniInterval + step),
         ),
         _buildButton(
@@ -266,16 +255,7 @@ class _DashboardScreenState extends State<DashboardScreen>
       bottom: 0,
       right: 0,
       child: Row(
-        children: <Widget>[
-          MaterialButton(
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            color: Colors.red,
-            onPressed: () => _loadingController!.value == 0
-                ? _loadingController!.forward()
-                : _loadingController!.reverse(),
-            child: Text('loading', style: textStyle),
-          ),
-        ],
+        children: <Widget>[],
       ),
     );
   }
