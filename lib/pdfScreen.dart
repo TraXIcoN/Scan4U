@@ -14,7 +14,7 @@ import 'Providers/documentProvider.dart';
 class PDFScreen extends StatefulWidget {
   DocumentModel document;
   GlobalKey<AnimatedListState> animatedListKey;
-  PDFScreen({this.document, this.animatedListKey});
+  PDFScreen({required this.document, required this.animatedListKey});
 
   @override
   _PDFScreenState createState() => _PDFScreenState();
@@ -144,9 +144,7 @@ class _PDFScreenState extends State<PDFScreen> {
                   }
                 }
                 showRenameDialog(
-                    index: docIndex,
-                    dateTime: document.dateTime,
-                    name: document.name);
+                    index: 1, dateTime: document.dateTime, name: document.name);
               },
             ),
             ListTile(
@@ -171,7 +169,7 @@ class _PDFScreenState extends State<PDFScreen> {
                     docIndex = index;
                   }
                 }
-                showDeleteDialog1(index: docIndex, dateTime: document.dateTime);
+                showDeleteDialog1(index: 1, dateTime: document.dateTime);
               },
             )
           ],
@@ -180,7 +178,8 @@ class _PDFScreenState extends State<PDFScreen> {
     );
   }
 
-  void showRenameDialog({int index, DateTime dateTime, String name}) {
+  void showRenameDialog(
+      {required int index, required DateTime dateTime, required String name}) {
     TextEditingController controller = TextEditingController();
     controller.text = name;
     controller.selection =
@@ -235,7 +234,7 @@ class _PDFScreenState extends State<PDFScreen> {
     );
   }
 
-  void showDeleteDialog1({int index, DateTime dateTime}) {
+  void showDeleteDialog1({required int index, required DateTime dateTime}) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -280,7 +279,7 @@ class _PDFScreenState extends State<PDFScreen> {
                   .deleteDocument(
                       index, dateTime.millisecondsSinceEpoch.toString());
               Timer(Duration(milliseconds: 300), () {
-                widget.animatedListKey.currentState
+                widget.animatedListKey.currentState!
                     .removeItem(index, (context, animation) => SizedBox());
               });
             },

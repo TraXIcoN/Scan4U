@@ -22,8 +22,15 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Future<bool> _goToLogin(BuildContext context) {
+    return Navigator.of(context)
+        .pushReplacementNamed('/')
+        // we dont want to pop the screen, just replace it completely
+        .then((_) => false);
+  }
+
   MethodChannel channel = MethodChannel('opencv');
-  File _file;
+  late File _file;
   @override
   void initState() {
     // TODO: implement initState
@@ -132,7 +139,7 @@ class _HomeState extends State<Home> {
     Provider.of<DocumentProvider>(context, listen: false).getDocuments();
   }
 
-  Widget buildDocumentCard(int index, Animation animation) {
+  Widget buildDocumentCard(int index, Animation<double> animation) {
     return SizeTransition(
       sizeFactor: animation,
       child: StatefulBuilder(
@@ -156,21 +163,20 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(left: 12, top: 12, right: 12),
-                  child: Container(
+                  /* child: Container(
                     decoration: BoxDecoration(
                       border: Border(
                           left: BorderSide(color: Colors.grey[300]),
                           right: BorderSide(color: Colors.grey[300]),
                           top: BorderSide(color: Colors.grey[300])),
-                    ),
-                    child: Image.file(
-                      new File(Provider.of<DocumentProvider>(context)
-                          .allDocuments[index]
-                          .documentPath),
-                      height: 150,
-                      width: 130,
-                      fit: BoxFit.cover,
-                    ),
+                    ), */
+                  child: Image.file(
+                    new File(Provider.of<DocumentProvider>(context)
+                        .allDocuments[index]
+                        .documentPath),
+                    height: 150,
+                    width: 130,
+                    fit: BoxFit.cover,
                   ),
                 ),
                 Column(
@@ -227,7 +233,10 @@ class _HomeState extends State<Home> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             IconButton(
-                                icon: Icon(Icons.share,color: ThemeData.dark().accentColor,),
+                                icon: Icon(
+                                  Icons.share,
+                                  color: ThemeData.dark().accentColor,
+                                ),
                                 onPressed: () {
                                   shareDocument(Provider.of<DocumentProvider>(
                                           context,
@@ -236,11 +245,17 @@ class _HomeState extends State<Home> {
                                       .pdfPath);
                                 }),
                             IconButton(
-                              icon: Icon(Icons.cloud_upload,color: ThemeData.dark().accentColor,),
+                              icon: Icon(
+                                Icons.cloud_upload,
+                                color: ThemeData.dark().accentColor,
+                              ),
                               onPressed: () {},
                             ),
                             IconButton(
-                                icon: Icon(Icons.more_vert,color: ThemeData.dark().accentColor,),
+                                icon: Icon(
+                                  Icons.more_vert,
+                                  color: ThemeData.dark().accentColor,
+                                ),
                                 onPressed: () {
                                   showModalSheet(
                                       index: index,
@@ -282,11 +297,11 @@ class _HomeState extends State<Home> {
   }
 
   void showModalSheet(
-      {int index,
-      String filePath,
-      String name,
-      DateTime dateTime,
-      String pdfPath}) {
+      {required int index,
+      required String filePath,
+      required String name,
+      required DateTime dateTime,
+      required String pdfPath}) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -301,8 +316,6 @@ class _HomeState extends State<Home> {
                   Padding(
                     padding: const EdgeInsets.only(left: 20, top: 15),
                     child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey[300])),
                       child: Image.file(
                         new File(filePath),
                         height: 80,
@@ -375,7 +388,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void showDeleteDialog1({int index, DateTime dateTime}) {
+  void showDeleteDialog1({required int index, required DateTime dateTime}) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -420,7 +433,7 @@ class _HomeState extends State<Home> {
                   .deleteDocument(
                       index, dateTime.millisecondsSinceEpoch.toString());
               Timer(Duration(milliseconds: 300), () {
-                animatedListKey.currentState.removeItem(
+                animatedListKey.currentState!.removeItem(
                     index,
                     (context, animation) =>
                         buildDocumentCard(index, animation));
@@ -436,7 +449,8 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void showRenameDialog({int index, DateTime dateTime, String name}) {
+  void showRenameDialog(
+      {required int index, required DateTime dateTime, required String name}) {
     TextEditingController controller = TextEditingController();
     controller.text = name;
     controller.selection =

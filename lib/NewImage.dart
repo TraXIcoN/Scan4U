@@ -21,10 +21,10 @@ class NewImage extends StatefulWidget {
 class _NewImageState extends State<NewImage> {
   final GlobalKey key = GlobalKey();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  double width, height;
-  Size imagePixelSize;
+  late double width, height;
+  late Size imagePixelSize;
   bool isFile = false;
-  Offset tl, tr, bl, br;
+  late Offset tl, tr, bl, br;
   bool isLoading = false;
   @override
   void initState() {
@@ -34,9 +34,9 @@ class _NewImageState extends State<NewImage> {
   }
 
   void getImageSize() {
-    RenderBox imageBox = key.currentContext.findRenderObject();
-    width = imageBox.size.width;
-    height = imageBox.size.height;
+    RenderObject? imageBox = key.currentContext!.findRenderObject();
+    width = 50;
+    height = 50;
     imagePixelSize = ImageSizGetter.getSize(widget.file);
     tl = new Offset(20, 20);
     tr = new Offset(width - 20, 20);
@@ -53,143 +53,143 @@ class _NewImageState extends State<NewImage> {
         backgroundColor: ThemeData.dark().canvasColor,
         key: _scaffoldKey,
         body: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Stack(
-        children: <Widget>[
-          GestureDetector(
-            onPanDown: (details) {
-              double x1 = details.localPosition.dx;
-              double y1 = details.localPosition.dy;
-              double x2 = tl.dx;
-              double y2 = tl.dy;
-              double x3 = tr.dx;
-              double y3 = tr.dy;
-              double x4 = bl.dx;
-              double y4 = bl.dy;
-              double x5 = br.dx;
-              double y5 = br.dy;
-              if (sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) <
-                      30 &&
-                  x1 >= 0 &&
-                  y1 >= 0 &&
-                  x1 < width / 2 &&
-                  y1 < height / 2) {
-                print(details.localPosition);
-                setState(() {
-                  tl = details.localPosition;
-                });
-              } else if (sqrt((x3 - x1) * (x3 - x1) +
-                          (y3 - y1) * (y3 - y1)) <
-                      30 &&
-                  x1 >= width / 2 &&
-                  y1 >= 0 &&
-                  x1 < width &&
-                  y1 < height / 2) {
-                setState(() {
-                  tr = details.localPosition;
-                });
-              } else if (sqrt((x4 - x1) * (x4 - x1) +
-                          (y4 - y1) * (y4 - y1)) <
-                      30 &&
-                  x1 >= 0 &&
-                  y1 >= height / 2 &&
-                  x1 < width / 2 &&
-                  y1 < height) {
-                setState(() {
-                  bl = details.localPosition;
-                });
-              } else if (sqrt((x5 - x1) * (x5 - x1) +
-                          (y5 - y1) * (y5 - y1)) <
-                      30 &&
-                  x1 >= width / 2 &&
-                  y1 >= height / 2 &&
-                  x1 < width &&
-                  y1 < height) {
-                setState(() {
-                  br = details.localPosition;
-                });
-              }
-            },
-            onPanUpdate: (details) {
-              double x1 = details.localPosition.dx;
-              double y1 = details.localPosition.dy;
-              double x2 = tl.dx;
-              double y2 = tl.dy;
-              double x3 = tr.dx;
-              double y3 = tr.dy;
-              double x4 = bl.dx;
-              double y4 = bl.dy;
-              double x5 = br.dx;
-              double y5 = br.dy;
-              if (sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) <
-                      30 &&
-                  x1 >= 0 &&
-                  y1 >= 0 &&
-                  x1 < width / 2 &&
-                  y1 < height / 2) {
-                print(details.localPosition);
-                setState(() {
-                  tl = details.localPosition;
-                });
-              } else if (sqrt((x3 - x1) * (x3 - x1) +
-                          (y3 - y1) * (y3 - y1)) <
-                      30 &&
-                  x1 >= width / 2 &&
-                  y1 >= 0 &&
-                  x1 < width &&
-                  y1 < height / 2) {
-                setState(() {
-                  tr = details.localPosition;
-                });
-              } else if (sqrt((x4 - x1) * (x4 - x1) +
-                          (y4 - y1) * (y4 - y1)) <
-                      30 &&
-                  x1 >= 0 &&
-                  y1 >= height / 2 &&
-                  x1 < width / 2 &&
-                  y1 < height) {
-                setState(() {
-                  bl = details.localPosition;
-                });
-              } else if (sqrt((x5 - x1) * (x5 - x1) +
-                          (y5 - y1) * (y5 - y1)) <
-                      30 &&
-                  x1 >= width / 2 &&
-                  y1 >= height / 2 &&
-                  x1 < width &&
-                  y1 < height) {
-                setState(() {
-                  br = details.localPosition;
-                });
-              }
-            },
-            child: SafeArea(
-              child: Container(
-                color: ThemeData.dark().canvasColor,
-                constraints: BoxConstraints(maxHeight:450),
-                child: Image.file(
-                  widget.file,
-                  key: key,
-                ),
-              ),
-            ),
-          ),
-          isFile
-              ? SafeArea(
-                  child: CustomPaint(
-                    painter: CropPainter(tl, tr, bl, br),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Stack(
+                children: <Widget>[
+                  GestureDetector(
+                    onPanDown: (details) {
+                      double x1 = details.localPosition.dx;
+                      double y1 = details.localPosition.dy;
+                      double x2 = tl.dx;
+                      double y2 = tl.dy;
+                      double x3 = tr.dx;
+                      double y3 = tr.dy;
+                      double x4 = bl.dx;
+                      double y4 = bl.dy;
+                      double x5 = br.dx;
+                      double y5 = br.dy;
+                      if (sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) <
+                              30 &&
+                          x1 >= 0 &&
+                          y1 >= 0 &&
+                          x1 < width / 2 &&
+                          y1 < height / 2) {
+                        print(details.localPosition);
+                        setState(() {
+                          tl = details.localPosition;
+                        });
+                      } else if (sqrt((x3 - x1) * (x3 - x1) +
+                                  (y3 - y1) * (y3 - y1)) <
+                              30 &&
+                          x1 >= width / 2 &&
+                          y1 >= 0 &&
+                          x1 < width &&
+                          y1 < height / 2) {
+                        setState(() {
+                          tr = details.localPosition;
+                        });
+                      } else if (sqrt((x4 - x1) * (x4 - x1) +
+                                  (y4 - y1) * (y4 - y1)) <
+                              30 &&
+                          x1 >= 0 &&
+                          y1 >= height / 2 &&
+                          x1 < width / 2 &&
+                          y1 < height) {
+                        setState(() {
+                          bl = details.localPosition;
+                        });
+                      } else if (sqrt((x5 - x1) * (x5 - x1) +
+                                  (y5 - y1) * (y5 - y1)) <
+                              30 &&
+                          x1 >= width / 2 &&
+                          y1 >= height / 2 &&
+                          x1 < width &&
+                          y1 < height) {
+                        setState(() {
+                          br = details.localPosition;
+                        });
+                      }
+                    },
+                    onPanUpdate: (details) {
+                      double x1 = details.localPosition.dx;
+                      double y1 = details.localPosition.dy;
+                      double x2 = tl.dx;
+                      double y2 = tl.dy;
+                      double x3 = tr.dx;
+                      double y3 = tr.dy;
+                      double x4 = bl.dx;
+                      double y4 = bl.dy;
+                      double x5 = br.dx;
+                      double y5 = br.dy;
+                      if (sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) <
+                              30 &&
+                          x1 >= 0 &&
+                          y1 >= 0 &&
+                          x1 < width / 2 &&
+                          y1 < height / 2) {
+                        print(details.localPosition);
+                        setState(() {
+                          tl = details.localPosition;
+                        });
+                      } else if (sqrt((x3 - x1) * (x3 - x1) +
+                                  (y3 - y1) * (y3 - y1)) <
+                              30 &&
+                          x1 >= width / 2 &&
+                          y1 >= 0 &&
+                          x1 < width &&
+                          y1 < height / 2) {
+                        setState(() {
+                          tr = details.localPosition;
+                        });
+                      } else if (sqrt((x4 - x1) * (x4 - x1) +
+                                  (y4 - y1) * (y4 - y1)) <
+                              30 &&
+                          x1 >= 0 &&
+                          y1 >= height / 2 &&
+                          x1 < width / 2 &&
+                          y1 < height) {
+                        setState(() {
+                          bl = details.localPosition;
+                        });
+                      } else if (sqrt((x5 - x1) * (x5 - x1) +
+                                  (y5 - y1) * (y5 - y1)) <
+                              30 &&
+                          x1 >= width / 2 &&
+                          y1 >= height / 2 &&
+                          x1 < width &&
+                          y1 < height) {
+                        setState(() {
+                          br = details.localPosition;
+                        });
+                      }
+                    },
+                    child: SafeArea(
+                      child: Container(
+                        color: ThemeData.dark().canvasColor,
+                        constraints: BoxConstraints(maxHeight: 450),
+                        child: Image.file(
+                          widget.file,
+                          key: key,
+                        ),
+                      ),
+                    ),
                   ),
-                )
-              : SizedBox()
-        ],
-                ),
-                bottomSheet()
-              ],
-            ),
-          ));
+                  isFile
+                      ? SafeArea(
+                          child: CustomPaint(
+                            painter: CropPainter(tl, tr, bl, br),
+                          ),
+                        )
+                      : SizedBox()
+                ],
+              ),
+              bottomSheet()
+            ],
+          ),
+        ));
   }
 
   Widget bottomSheet() {
@@ -224,7 +224,8 @@ class _NewImageState extends State<NewImage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                FlatButton(
+                ElevatedButton(
+                  onPressed: () {},
                   child: Text(
                     "Retake",
                     style: TextStyle(
@@ -257,48 +258,48 @@ class _NewImageState extends State<NewImage> {
                             ),
                           )
                         : isFile
-                            ? FlatButton(
-                                child: Text(
-                                  "Continue",
-                                  softWrap: true,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
-                                ),
-                                onPressed: () async {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  Timer(Duration(seconds: 1), () {
-                                    Navigator.of(context)
-                                        .pushReplacement(MaterialPageRoute(
-                                            builder: (context) => ShowImage(
-                                                  tl: tl,
-                                                  tr: tr,
-                                                  bl: bl,
-                                                  br: br,
-                                                  width: width,
-                                                  height: height,
-                                                  file: widget.file,
-                                                  imagePixelSize: imagePixelSize,
-                                                  animatedListKey:
-                                                      widget.animatedListKey,
-                                                )));
-                                  });
-                                },
-                              )
-                            : Container(
-                                width: 60,
-                                height: 20.0,
-                                child: Center(
-                                    child: Container(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          valueColor: AlwaysStoppedAnimation(
-                                              Colors.white),
-                                        ))),
-                              ),
+                        ? FlatButton(
+                            child: Text(
+                              "Continue",
+                              softWrap: true,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                            onPressed: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              Timer(Duration(seconds: 1), () {
+                                Navigator.of(context)
+                                    .pushReplacement(MaterialPageRoute(
+                                        builder: (context) => ShowImage(
+                                              tl: tl,
+                                              tr: tr,
+                                              bl: bl,
+                                              br: br,
+                                              width: width,
+                                              height: height,
+                                              file: widget.file,
+                                              imagePixelSize: imagePixelSize,
+                                              animatedListKey:
+                                                  widget.animatedListKey,
+                                            )));
+                              });
+                            },
+                          )
+                        : Container(
+                            width: 60,
+                            height: 20.0,
+                            child: Center(
+                                child: Container(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor:
+                                          AlwaysStoppedAnimation(Colors.white),
+                                    ))),
+                          ),
                   ),
                 )
               ],

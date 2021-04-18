@@ -50,6 +50,7 @@ class Search extends SearchDelegate {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => PDFScreen(
                   document: documentList[index],
+                  animatedListKey: GlobalKey<AnimatedListState>(),
                 ),
               ));
             },
@@ -71,7 +72,10 @@ class Search extends SearchDelegate {
           child: ListTile(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => PDFScreen(document: documentList[index]),
+                builder: (context) => PDFScreen(
+                  document: documentList[index],
+                  animatedListKey: GlobalKey<AnimatedListState>(),
+                ),
               ));
             },
             leading: Image.file(new File(documentList[index].documentPath)),
@@ -106,7 +110,10 @@ class Search extends SearchDelegate {
           child: ListTile(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => PDFScreen(document: documentList[index]),
+                builder: (context) => PDFScreen(
+                  document: documentList[index],
+                  animatedListKey: GlobalKey<AnimatedListState>(),
+                ),
               ));
             },
             leading: Image.file(new File(documentList[index].documentPath)),
@@ -127,7 +134,10 @@ class Search extends SearchDelegate {
           child: ListTile(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => PDFScreen(document: documentList[index]),
+                builder: (context) => PDFScreen(
+                  document: documentList[index],
+                  animatedListKey: GlobalKey<AnimatedListState>(),
+                ),
               ));
             },
             leading: Image.file(new File(documentList[index].documentPath)),

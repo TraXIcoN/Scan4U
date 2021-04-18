@@ -17,15 +17,15 @@ class ShowImage extends StatefulWidget {
   Offset tl, tr, bl, br;
   GlobalKey<AnimatedListState> animatedListKey;
   ShowImage(
-      {this.file,
-      this.bl,
-      this.br,
-      this.tl,
-      this.height,
-      this.tr,
+      {required this.file,
+      required this.bl,
+      required this.br,
+      required this.tl,
+      required this.height,
+      required this.tr,
       this.imagePixelSize,
-      this.width,
-      this.animatedListKey});
+      required this.width,
+      required this.animatedListKey});
   @override
   _ShowImageState createState() => _ShowImageState();
 }
@@ -37,7 +37,7 @@ class _ShowImageState extends State<ShowImage> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   int index = 0;
   bool isBottomOpened = false;
-  PersistentBottomSheetController controller;
+  late PersistentBottomSheetController controller;
   var whiteboardBytes;
   var originalBytes;
   var grayBytes;
@@ -47,14 +47,14 @@ class _ShowImageState extends State<ShowImage> {
   bool isRotating = false;
   int angle = 0;
   String canvasType = "whiteboard";
-  double tl_x;
-  double tr_x;
-  double bl_x;
-  double br_x;
-  double tl_y;
-  double tr_y;
-  double bl_y;
-  double br_y;
+  late double tl_x;
+  late double tr_x;
+  late double bl_x;
+  late double br_x;
+  late double tl_y;
+  late double tr_y;
+  late double bl_y;
+  late double br_y;
   var bytes;
   @override
   void initState() {
@@ -134,7 +134,7 @@ class _ShowImageState extends State<ShowImage> {
             onPressed: () {
               Navigator.pop(context);
               Navigator.pop(context);
-              return false;
+              return;
             },
             child: Text(
               "Discard",
@@ -193,7 +193,7 @@ class _ShowImageState extends State<ShowImage> {
                                       documentPath: widget.file.path,
                                       dateTime: DateTime.now(),
                                       animatedListKey: widget.animatedListKey,
-                                      angle: angle);
+                                      angle: angle, shareLink: '');
                             });
                           },
                         )
@@ -218,26 +218,25 @@ class _ShowImageState extends State<ShowImage> {
               bytes == null
                   ? Container()
                   : isRotating
-                      ? Center(
-                          child: Container(
-                              height: 150,
-                              width: 100,
-                              child: Center(
-                                  child: Container(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor:
-                                      AlwaysStoppedAnimation(Colors.black),
-                                ),
-                              ))))
-                      : Center(
-                          child: Container(
-                              padding: EdgeInsets.all(10),
-                              constraints:
-                                  BoxConstraints(maxHeight: 300, maxWidth: 250),
-                              child: Image.memory(bytes))),
+                  ? Center(
+                      child: Container(
+                          height: 150,
+                          width: 100,
+                          child: Center(
+                              child: Container(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation(Colors.black),
+                            ),
+                          ))))
+                  : Center(
+                      child: Container(
+                          padding: EdgeInsets.all(10),
+                          constraints:
+                              BoxConstraints(maxHeight: 300, maxWidth: 250),
+                          child: Image.memory(bytes))),
             ],
           ),
         ),
@@ -309,7 +308,7 @@ class _ShowImageState extends State<ShowImage> {
                 builder: (context) => colorBottomSheet(),
                 enableDrag: true,
               );
-              controller = scaffoldKey.currentState
+              controller = scaffoldKey.currentState!
                   .showBottomSheet((context) => bottomSheet);
             }
           }
@@ -563,7 +562,7 @@ class _ShowImageState extends State<ShowImage> {
             builder: (context) => colorBottomSheet(),
             enableDrag: true,
           );
-          controller = scaffoldKey.currentState
+          controller = scaffoldKey.currentState!
               .showBottomSheet((context) => bottomSheet);
         }
       });

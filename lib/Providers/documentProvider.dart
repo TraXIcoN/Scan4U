@@ -28,23 +28,23 @@ class DocumentProvider extends ChangeNotifier {
     });
     allDocuments.sort((a, b) => b.dateTime.compareTo(a.dateTime));
     DocumentModel document = DocumentModel(
-          name: "firstCard55466222",
-          documentPath: "",
-          dateTime:DateTime.utc(1969, 7, 20, 20, 18, 04),
-          pdfPath: "",
-          shareLink: "");
+        name: "firstCard55466222",
+        documentPath: "",
+        dateTime: DateTime.utc(1969, 7, 20, 20, 18, 04),
+        pdfPath: "",
+        shareLink: "");
     allDocuments.add(document);
     notifyListeners();
     return true;
   }
 
   void saveDocument(
-      {@required String name,
-      @required String documentPath,
-      @required DateTime dateTime,
-      String shareLink,
-      GlobalKey<AnimatedListState> animatedListKey,
-      int angle}) async {
+      {required String name,
+      required String documentPath,
+      required DateTime dateTime,
+      required String shareLink,
+      required GlobalKey<AnimatedListState> animatedListKey,
+      required int angle}) async {
     final pdf = pw.Document();
     final image = PdfImage.file(
       pdf.document,
@@ -53,7 +53,10 @@ class DocumentProvider extends ChangeNotifier {
     pdf.addPage(pw.Page(
       pageFormat: PdfPageFormat(2480, 3508),
       build: (pw.Context context) {
-        return pw.Image(image, fit: angle==0 || angle==180?pw.BoxFit.fill:pw.BoxFit.fitWidth);
+        return pw.Image(image,
+            fit: angle == 0 || angle == 180
+                ? pw.BoxFit.fill
+                : pw.BoxFit.fitWidth);
       },
     ));
     final tempDir = await getTemporaryDirectory();
@@ -83,12 +86,12 @@ class DocumentProvider extends ChangeNotifier {
     allDocuments.add(document);
     allDocuments.sort((a, b) => b.dateTime.compareTo(a.dateTime));
     Timer(Duration(milliseconds: 500), () {
-      animatedListKey.currentState.insertItem(0);
+      animatedListKey.currentState!.insertItem(0);
     });
   }
 
   void deleteDocument(int index, String key) async {
-    Timer(Duration(milliseconds: 300),(){
+    Timer(Duration(milliseconds: 300), () {
       allDocuments.removeAt(index);
       notifyListeners();
     });

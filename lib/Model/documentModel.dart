@@ -1,16 +1,16 @@
 import 'package:flutter/services.dart';
 
-class DocumentModel{
+class DocumentModel {
   String name;
   String shareLink;
   String documentPath;
   DateTime dateTime;
   String pdfPath;
-  DocumentModel({
-    this.name,
-    this.shareLink="",
-    this.documentPath,
-    this.dateTime,
-    this.pdfPath
-  });
+  DocumentModel(
+      {required this.name,
+      required this.shareLink,
+      required this.documentPath,
+      required this.dateTime,
+      required this.pdfPath});
 }
+

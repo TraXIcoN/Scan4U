@@ -20,10 +20,10 @@ class CropImage extends StatefulWidget {
 class _CropImageState extends State<CropImage> {
   final GlobalKey key = GlobalKey();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  double width, height;
-  Size imagePixelSize;
+  late double width, height;
+  late Size imagePixelSize;
   bool isFile = false;
-  Offset tl, tr, bl, br;
+  late Offset tl, tr, bl, br;
   bool isLoading = false;
   MethodChannel channel = new MethodChannel('opencv');
   @override
@@ -34,9 +34,9 @@ class _CropImageState extends State<CropImage> {
   }
 
   void getImageSize() {
-    RenderBox imageBox = key.currentContext.findRenderObject();
-    width = imageBox.size.width;
-    height = imageBox.size.height;
+    RenderObject? imageBox = key.currentContext!.findRenderObject();
+    width = 50;
+    height = 50;
     imagePixelSize = ImageSizGetter.getSize(widget.file);
     tl = new Offset(20, 20);
     tr = new Offset(width - 20, 20);
@@ -224,7 +224,8 @@ class _CropImageState extends State<CropImage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                FlatButton(
+                ElevatedButton(
+                  onPressed: () {},
                   child: Text(
                     "Retake",
                     style: TextStyle(
@@ -257,73 +258,73 @@ class _CropImageState extends State<CropImage> {
                             ),
                           )
                         : isFile
-                            ? FlatButton(
-                                child: Text(
-                                  "Continue",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
-                                ),
-                                onPressed: () async {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  double tl_x =
-                                      (imagePixelSize.width / width) * tl.dx;
-                                  double tr_x =
-                                      (imagePixelSize.width / width) * tr.dx;
-                                  double bl_x =
-                                      (imagePixelSize.width / width) * bl.dx;
-                                  double br_x =
-                                      (imagePixelSize.width / width) * br.dx;
+                        ? FlatButton(
+                            child: Text(
+                              "Continue",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                            onPressed: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              double tl_x =
+                                  (imagePixelSize.width / width) * tl.dx;
+                              double tr_x =
+                                  (imagePixelSize.width / width) * tr.dx;
+                              double bl_x =
+                                  (imagePixelSize.width / width) * bl.dx;
+                              double br_x =
+                                  (imagePixelSize.width / width) * br.dx;
 
-                                  double tl_y =
-                                      (imagePixelSize.height / height) * tl.dy;
-                                  double tr_y =
-                                      (imagePixelSize.height / height) * tr.dy;
-                                  double bl_y =
-                                      (imagePixelSize.height / height) * bl.dy;
-                                  double br_y =
-                                      (imagePixelSize.height / height) * br.dy;
-                                  Timer(Duration(seconds: 1), () async {
-                                    var bytesArray = await channel
-                                        .invokeMethod('convertToGray', {
-                                      'filePath': widget.file.path,
-                                      'tl_x': tl_x,
-                                      'tl_y': tl_y,
-                                      'tr_x': tr_x,
-                                      'tr_y': tr_y,
-                                      'bl_x': bl_x,
-                                      'bl_y': bl_y,
-                                      'br_x': br_x,
-                                      'br_y': br_y,
-                                    });
-                                    Navigator.of(context).pop([
-                                      bytesArray,
-                                      tl_x,
-                                      tl_y,
-                                      tr_x,
-                                      tr_y,
-                                      bl_x,
-                                      bl_y,
-                                      br_x,
-                                      br_y
-                                    ]);
-                                  });
-                                },
-                              )
-                            : Container(
-                                width: 60,
-                                height: 20.0,
-                                child: Center(
-                                    child: Container(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          valueColor: AlwaysStoppedAnimation(
-                                              Colors.white),
-                                        ))),
-                              ),
+                              double tl_y =
+                                  (imagePixelSize.height / height) * tl.dy;
+                              double tr_y =
+                                  (imagePixelSize.height / height) * tr.dy;
+                              double bl_y =
+                                  (imagePixelSize.height / height) * bl.dy;
+                              double br_y =
+                                  (imagePixelSize.height / height) * br.dy;
+                              Timer(Duration(seconds: 1), () async {
+                                var bytesArray = await channel
+                                    .invokeMethod('convertToGray', {
+                                  'filePath': widget.file.path,
+                                  'tl_x': tl_x,
+                                  'tl_y': tl_y,
+                                  'tr_x': tr_x,
+                                  'tr_y': tr_y,
+                                  'bl_x': bl_x,
+                                  'bl_y': bl_y,
+                                  'br_x': br_x,
+                                  'br_y': br_y,
+                                });
+                                Navigator.of(context).pop([
+                                  bytesArray,
+                                  tl_x,
+                                  tl_y,
+                                  tr_x,
+                                  tr_y,
+                                  bl_x,
+                                  bl_y,
+                                  br_x,
+                                  br_y
+                                ]);
+                              });
+                            },
+                          )
+                        : Container(
+                            width: 60,
+                            height: 20.0,
+                            child: Center(
+                                child: Container(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor:
+                                          AlwaysStoppedAnimation(Colors.white),
+                                    ))),
+                          ),
                   ),
                 )
               ],
