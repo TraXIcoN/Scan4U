@@ -58,29 +58,37 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
-      value: DocumentProvider(),
-      child: MaterialApp(
-        theme: ThemeData(
-            appBarTheme: AppBarTheme(color: ThemeData.dark().canvasColor),
-            textSelectionColor: Colors.blueGrey,
-            floatingActionButtonTheme: FloatingActionButtonThemeData(
-                backgroundColor: ThemeData.dark().canvasColor)),
-        home: FlutterLogin(
-          onLogin: (loginData) {
-            print('Login info');
-            print('Name: ${loginData.name}');
-            print('Password: ${loginData.password}');
-            return _loginUser(loginData);
-          },
-          onSubmitAnimationCompleted: () {
-            Navigator.of(context).pushReplacement(FadePageRoute(
-              builder: (context) => DashboardScreen(),
-            ));
-          },
-          onRecoverPassword: (String) {},
-          onSignup: (LoginData) {},
-        ),
-      ),
-    );
+        value: DocumentProvider(),
+        child: MaterialApp(
+          theme: ThemeData(
+              appBarTheme: AppBarTheme(color: ThemeData.dark().canvasColor),
+              textSelectionColor: Colors.blueGrey,
+              floatingActionButtonTheme: FloatingActionButtonThemeData(
+                  backgroundColor: ThemeData.dark().canvasColor)),
+          home: FlutterLogin(
+            logo: 'lib/Model/images/docIcon.png',
+            title: 'ScaN4U',
+            onLogin: (loginData) {
+              print('Login info');
+              print('Name: ${loginData.name}');
+              print('Password: ${loginData.password}');
+              return _loginUser(loginData);
+            },
+            onSubmitAnimationCompleted: () {
+              Navigator.of(context).pushReplacement(FadePageRoute(
+                builder: (context) => DashboardScreen(),
+              ));
+            },
+            onRecoverPassword: (String) {},
+            onSignup: (LoginData) {},
+            theme: LoginTheme(
+              titleStyle: TextStyle(
+                color: Colors.greenAccent,
+                fontFamily: 'Quicksand',
+                letterSpacing: 2,
+              ),
+            ),
+          ),
+        ));
   }
 }
