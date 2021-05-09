@@ -3,8 +3,8 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:documentscanner2/crop_painter.dart';
-import 'package:documentscanner2/showImage.dart';
+import 'package:scan4u/crop_painter.dart';
+import 'package:scan4u/showImage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

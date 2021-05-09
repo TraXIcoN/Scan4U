@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
-import 'package:documentscanner2/Model/documentModel.dart';
+import 'package:scan4u/Model/documentModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_full_pdf_viewer/full_pdf_viewer_scaffold.dart';
 import 'package:flutter_share/flutter_share.dart';

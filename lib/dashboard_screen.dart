@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:documentscanner2/theme.dart';
+import 'package:scan4u/theme.dart';
 import 'widgets.dart';
 import 'transition_route_observer.dart';
 import 'widgets/fade_in.dart';

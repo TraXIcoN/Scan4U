@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
-import 'package:documentscanner2/Providers/documentProvider.dart';
-import 'package:documentscanner2/cropImage.dart';
+import 'package:scan4u/Providers/documentProvider.dart';
+import 'package:scan4u/cropImage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_size_getter/image_size_getter.dart';
@@ -193,7 +193,8 @@ class _ShowImageState extends State<ShowImage> {
                                       documentPath: widget.file.path,
                                       dateTime: DateTime.now(),
                                       animatedListKey: widget.animatedListKey,
-                                      angle: angle, shareLink: '');
+                                      angle: angle,
+                                      shareLink: '');
                             });
                           },
                         )

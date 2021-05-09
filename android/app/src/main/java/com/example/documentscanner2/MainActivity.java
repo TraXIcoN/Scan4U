@@ -1,4 +1,4 @@
-package com.example.documentscanner2;
+package com.example.scan4u;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

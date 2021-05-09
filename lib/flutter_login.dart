@@ -1,7 +1,7 @@
 library flutter_login;
 
 import 'dart:math';
-import 'package:documentscanner2/src/models/login_data.dart';
+import 'package:scan4u/src/models/login_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter/foundation.dart';
@@ -24,6 +24,7 @@ export 'src/models/login_data.dart';
 export 'src/providers/login_messages.dart';
 export 'src/providers/login_theme.dart';
 import 'src/constants.dart';
+import 'Home.dart';
 
 class LoginProvider {
   final IconData icon;

@@ -1,4 +1,4 @@
-name: documentscanner2
+name: scan4u
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -42,6 +42,12 @@ dependencies:
   another_transformer_page_view:
   font_awesome_flutter:
   quiver:
+  qr_code_scanner:
+  gallery_saver:
+  firebase_auth:
+  cloud_firestore: ^0.12.9+4
+  video_player:
+  firebase_storage:
 
 dev_dependencies:
   flutter_test:

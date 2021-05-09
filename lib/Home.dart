@@ -1,10 +1,15 @@
 import 'dart:async';
-import 'package:documentscanner2/Providers/documentProvider.dart';
-import 'package:documentscanner2/Search.dart';
-import 'package:documentscanner2/drawer.dart';
-import 'package:documentscanner2/pdfScreen.dart';
+import 'package:scan4u/Providers/documentProvider.dart';
+import 'package:scan4u/Search.dart';
+import 'package:scan4u/drawer.dart';
+import 'package:scan4u/flutter_login.dart';
+import 'package:scan4u/pdfScreen.dart';
+import 'package:scan4u/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:video_player/video_player.dart';
+import 'package:gallery_saver/gallery_saver.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_full_pdf_viewer/full_pdf_viewer_scaffold.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,16 +17,20 @@ import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
-
+import 'package:image_picker/image_picker.dart';
+import 'package:gallery_saver/gallery_saver.dart';
+import 'shared/globals.dart' as globals;
+import 'shared/file_extension.dart';
 import 'Model/documentModel.dart';
 import 'NewImage.dart';
+import 'package:/scan4u/src/models/login_data.dart';
 
 class Home extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  HomeState createState() => HomeState();
 }
 
-class _HomeState extends State<Home> {
+class HomeState extends State<Home> {
   Future<bool> _goToLogin(BuildContext context) {
     return Navigator.of(context)
         .pushReplacementNamed('/')
@@ -30,12 +39,60 @@ class _HomeState extends State<Home> {
   }
 
   MethodChannel channel = MethodChannel('opencv');
-  late File _file;
+  String secondButtonText = 'Record video';
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
+
+  late File _cameraVideo;
+  late File _file;
+  late File _video;
+  late File sampleVideo;
+  late File temp;
+  late File _image;
+  late File _cameraImage;
+  String fileName = '';
+
+  final AuthService _auth = AuthService();
+
+  ImagePicker picker = ImagePicker();
+
+  late VideoPlayerController _videoPlayerController;
+  late VideoPlayerController _cameraVideoPlayerController;
+
+  // This funcion will helps you to pick and Image from Gallery
+  pickImageFromGallery() async {
+    PickedFile pickedFile =
+        await picker.getImage(source: ImageSource.gallery, imageQuality: 50);
+
+    File image = File(pickedFile.path);
+    this._image = image;
+  }
+
+  // This funcion will helps you to pick and Image from Camera
+  pickImageFromCamera() async {
+    PickedFile pickedFile =
+        await picker.getImage(source: ImageSource.camera, imageQuality: 50);
+
+    File image = File(pickedFile.path);
+    this._cameraImage = image;
+  }
+
+  // This funcion will helps you to pick a Video File
+  pickVideo() async {
+    /* _videoPlayerController = VideoPlayerController.file(_video)
+      ..initialize().then((_) {
+        setState(() {});
+        _videoPlayerController.play();
+      }); */
+    final fileName = await AppUtil.getFileNameWithExtension(sampleVideo);
+    globals.finalName = fileName!.replaceAll(".jpg", ".mp4");
+    print(globals.finalName);
+  }
+
+  // This funcion will helps you to pick a Video File from Camera
 
   static GlobalKey<AnimatedListState> animatedListKey =
       GlobalKey<AnimatedListState>();
@@ -47,7 +104,7 @@ class _HomeState extends State<Home> {
         child: DocDrawer(),
       )),
       appBar: AppBar(
-        title: Text("Doc Scan"),
+        title: Text("ScaN4U"),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
@@ -56,13 +113,21 @@ class _HomeState extends State<Home> {
             },
           ),
           IconButton(
-            icon: Icon(Icons.more_vert),
-            onPressed: () {},
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              _goToLogin(context);
+            },
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: () {
+            FlutterLogin(
+              onLogin: (LoginData) {},
+              onRecoverPassword: (String) {},
+              onSignup: (LoginData) {},
+            );
+          },
           label: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -82,7 +147,29 @@ class _HomeState extends State<Home> {
                 onPressed: () async {
                   chooseImage(ImageSource.gallery);
                 },
-              )
+              ),
+              Container(
+                color: Colors.white.withOpacity(0.2),
+                width: 2,
+                height: 15,
+              ),
+              IconButton(
+                icon: Icon(Icons.video_call),
+                onPressed: () async {
+                  pickVideoFromCamera();
+                },
+              ),
+              Container(
+                color: Colors.white.withOpacity(0.2),
+                width: 2,
+                height: 15,
+              ),
+              IconButton(
+                icon: Icon(Icons.movie),
+                onPressed: () async {
+                  getVideo();
+                },
+              ),
             ],
           )),
       body: FutureBuilder(
@@ -93,7 +180,7 @@ class _HomeState extends State<Home> {
             return CircularProgressIndicator();
           }
           if (snapshot.hasError) {
-            print("error");
+            print("error++++++++++++++");
             return CircularProgressIndicator();
           }
           return Container(
@@ -126,6 +213,29 @@ class _HomeState extends State<Home> {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => NewImage(fileGallery, animatedListKey)));
     }
+  }
+
+  pickVideoFromCamera() async {
+    ImagePicker picker = ImagePicker();
+    PickedFile pickedFile = await picker.getVideo(source: ImageSource.camera);
+
+    _cameraVideo = File(pickedFile.path);
+    GallerySaver.saveVideo(pickedFile.path).then((bool success) {
+      setState(() {
+        secondButtonText = 'video saved!';
+      });
+    });
+  }
+
+  Future getVideo() async {
+    PickedFile tempVideo =
+        await ImagePicker().getVideo(source: ImageSource.gallery);
+    temp = File(tempVideo.path);
+    this.sampleVideo = temp;
+    globals.sampleVideo = sampleVideo;
+    final fileName = await AppUtil.getFileNameWithExtension(this.sampleVideo);
+    globals.finalName = fileName!.replaceAll(".jpg", ".mp4");
+    print(globals.finalName);
   }
 
   Future<bool> getAllDocuments() async {
