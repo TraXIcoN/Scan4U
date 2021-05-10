@@ -14,7 +14,7 @@ import 'user.dart';
 import 'package:scan4u/Home.dart';
 import 'constants.dart';
 import 'coustom_route.dart';
-import 'package:/scan4u/services/auth.dart';
+import 'services/auth.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,23 +35,38 @@ class MyApp extends StatelessWidget {
 class MyApp1 extends StatelessWidget {
   static const routeName = '/auth';
 
+  var mockuser1 = mockUsers;
+
   Duration get loginTime => Duration(milliseconds: timeDilation.ceil() * 2250);
 
-  Future login(email, password) async {
-    if (_formKey.currentState!.validate()) {
-      dynamic result = await _auth.signInWithEmailAndPassword(email, password);
-      if (result == null) {
-        return 'Wrong Username!';
-      }
+  Future<String?> login(LoginData data) async {
+    print('its in11');
+    dynamic result =
+        await _auth.signInWithEmailAndPassword(data.name, data.password);
+    if (result == null) {
+      print('Wrong Username!');
+    }
+    mockuser1[data.name] = data.password;
+    print(mockuser1);
+  }
+
+  Future<String?> signup(LoginData data) async {
+    dynamic result =
+        await _auth.registerWithEmailAndPassword(data.name, data.password);
+    if (result == null) {
+      return 'Wrong Username!';
+    } else {
+      mockuser1[data.name] = data.password;
+      return 'user added!';
     }
   }
 
   Future<String?> _loginUser(LoginData data) {
     return Future.delayed(loginTime).then((_) {
-      if (!mockUsers.containsKey(data.name)) {
+      if (!mockuser1.containsKey(data.name)) {
         return 'Username not exists';
       }
-      if (mockUsers[data.name] != data.password) {
+      if (mockuser1[data.name] != data.password) {
         return 'Password does not match';
       }
       return null;
@@ -60,7 +75,7 @@ class MyApp1 extends StatelessWidget {
 
   Future<String?> _recoverPassword(String name) {
     return Future.delayed(loginTime).then((_) {
-      if (!mockUsers.containsKey(name)) {
+      if (!mockuser1.containsKey(name)) {
         return 'Username not exists';
       }
       return null;
@@ -93,13 +108,13 @@ class MyApp1 extends StatelessWidget {
         print('Login info');
         print('Name: ${loginData.name}');
         print('Password: ${loginData.password}');
-        return _loginUser(loginData);
+        return login(loginData);
       },
       onSignup: (loginData) {
         print('Signup info');
         print('Name: ${loginData.name}');
         print('Password: ${loginData.password}');
-        return _loginUser(loginData);
+        return signup(loginData);
       },
       onSubmitAnimationCompleted: () {
         Navigator.of(context).pushReplacement(FadePageRoute(

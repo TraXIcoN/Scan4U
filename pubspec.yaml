@@ -48,6 +48,7 @@ dependencies:
   cloud_firestore: ^0.12.9+4
   video_player:
   firebase_storage:
+  flutter_spinkit:
 
 dev_dependencies:
   flutter_test:

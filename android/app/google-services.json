@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "821121749648",
+    "project_id": "scan4u-5fd62",
+    "storage_bucket": "scan4u-5fd62.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:821121749648:android:814e4d777656f42597be15",
+        "android_client_info": {
+          "package_name": "com.example.scan4u"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "821121749648-v6ba7iha1dj866a9h2p706hamsai7npp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfqCyenpL_Kjbj7dHhWxhQxtAHQ17GMBM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "821121749648-v6ba7iha1dj866a9h2p706hamsai7npp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

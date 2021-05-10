@@ -23,7 +23,7 @@ import 'shared/globals.dart' as globals;
 import 'shared/file_extension.dart';
 import 'Model/documentModel.dart';
 import 'NewImage.dart';
-import 'package:/scan4u/src/models/login_data.dart';
+import 'package:scan4u/services/post.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -168,6 +168,7 @@ class HomeState extends State<Home> {
                 icon: Icon(Icons.movie),
                 onPressed: () async {
                   getVideo();
+                  upload();
                 },
               ),
             ],
@@ -236,6 +237,23 @@ class HomeState extends State<Home> {
     final fileName = await AppUtil.getFileNameWithExtension(this.sampleVideo);
     globals.finalName = fileName!.replaceAll(".jpg", ".mp4");
     print(globals.finalName);
+  }
+
+  upload() async {
+    final StorageReference storageReference =
+        FirebaseStorage.instance.ref().child(globals.finalName);
+    final StorageUploadTask uploadTask =
+        storageReference.putFile(globals.sampleVideo);
+    await uploadTask.onComplete;
+    print('File Uploaded');
+    storageReference.getDownloadURL().then((fileURL) {
+      setState(() {
+        globals.uploadedFileURL = fileURL;
+        print(globals.uploadedFileURL);
+      });
+    });
+    await _auth.databaseIntegrate();
+    await sendVideo();
   }
 
   Future<bool> getAllDocuments() async {
